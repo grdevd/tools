@@ -15,8 +15,11 @@ jobs:
       - name: Test
         run: cargo test
   publish:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Install toolchain
+        run: rustup target add aarch64-apple-darwin
       - name: Build "aarch64-apple-darwin"
         run: cargo build --release --target=aarch64-apple-darwin
