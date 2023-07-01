@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - "v*.*.*"
 
 jobs:
   build:
@@ -25,8 +27,9 @@ jobs:
       - name: Build "aarch64-apple-darwin"
         run: cargo build --release --target=aarch64-apple-darwin
       - name: Create a Release
-        uses: elgohr/Github-Release-Action@v4
+        uses: softprops/action-gh-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GITHUB_REPOSITORY: grdevd/tools
         with:
-          title: MyReleaseMessage
+          body_path: ${{ github.workspace }}-CHANGELOG.md
+          token: ${{ secrets.RELEASE_TOKEN }}
