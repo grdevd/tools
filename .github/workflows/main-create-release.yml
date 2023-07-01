@@ -1,9 +1,6 @@
 name: Create release
 
-on:
-  push:
-    branches:
-      - main
+on: push
 
 jobs:
   build:
@@ -24,11 +21,17 @@ jobs:
         run: rustup target add aarch64-apple-darwin
       - name: Build "aarch64-apple-darwin"
         run: cargo build --release --target=aarch64-apple-darwin
+      - name: Zip output
+        run: zip -qq -r tools.zip bd24
+        working-directory: target/aarch64-apple-darwin/release
       - name: Create a Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/v')
         env:
           GITHUB_REPOSITORY: grdevd/tools
+          TARGET_DIR: target/aarch64-apple-darwin/release
         with:
-          body_path: ${{ github.workspace }}-CHANGELOG.md
+          body_path: ${{ github.workspace }}/CHANGELOG.md
           token: ${{ secrets.RELEASE_TOKEN }}
+          # All executables to include in the release
+          files: target/aarch64-apple-darwin/release/tools.zip
