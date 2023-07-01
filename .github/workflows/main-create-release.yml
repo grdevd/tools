@@ -14,7 +14,8 @@ jobs:
         run: cargo build
       - name: Test
         run: cargo test
-  publish:
+  publishAarch64AppleDarwin:
+    name: Publish for macOS (ARM)
     needs: build
     runs-on: macos-12
     steps:
